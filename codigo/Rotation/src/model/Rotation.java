@@ -3,13 +3,15 @@ package model;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.osoa.sca.annotations.Reference;
+
 import interfaces.Observer;
 import interfaces.Subject;
 
 public class Rotation implements Observer{
 	
 	private CoordinatesDTO coordinatesAndInfo;
-	
+	@Reference
 	private Subject subject;
 	
 	
