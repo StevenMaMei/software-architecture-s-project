@@ -9,3 +9,6 @@ port 1102
 
 service name: taskDistributor service net: rmiServiceDistributor
 port 1103
+
+service name: subject service net: rmiServiceSubject
+por 1104

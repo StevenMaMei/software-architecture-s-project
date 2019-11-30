@@ -31,9 +31,11 @@ public class TaskDistributorImp implements TaskDistributor, Subject {
 		}
 	}
 
-	public void attach(Observer obs) {
+	public synchronized void attach(Observer obs) {
 		if(taskQueue.size() > 0) {
 			obs.update();
+		}else {
+			observersSet.add(obs);
 		}
 	}
 
