@@ -5,6 +5,7 @@ import java.util.concurrent.Executors;
 
 import org.osoa.sca.annotations.Reference;
 
+import interfaces.ImageHandler;
 import interfaces.Observer;
 import interfaces.Subject;
 
@@ -13,13 +14,17 @@ public class Rotation implements Observer{
 	private CoordinatesDTO coordinatesAndInfo;
 	@Reference
 	private Subject subject;
-	
+	@Reference
+	private ImageHandler image;
 	
 	@Override
 	public void update() {
 		coordinatesAndInfo = subject.getState();
-		// TODO Auto-generated method stub
-		
+		if(coordinatesAndInfo != null) {
+			performRotation();
+		}else {
+			subject.attach(this);
+		}
 	}
 	
 	public void performRotation() {
@@ -33,7 +38,7 @@ public class Rotation implements Observer{
 			threads = quantOfCoords;
 		}
 		
-		delta = (int) Math.ceil(quantOfCoords/threads);
+		delta = (int) Math.ceil((quantOfCoords*1.0)/threads);
 		
 		ExecutorService service = Executors.newFixedThreadPool(threads);
 		int i = 0;
@@ -50,7 +55,14 @@ public class Rotation implements Observer{
 			
 		}
 		service.shutdown();
-		
+		while(!service.isTerminated()) {
+			image.setProcessedFragment(coordinatesAndInfo);
+			try {
+				Thread.sleep(50);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	/**
