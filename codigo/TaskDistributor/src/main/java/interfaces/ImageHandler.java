@@ -9,5 +9,6 @@ import model.CoordinatesDTO;
 public interface ImageHandler {
 
 	public void setProcessedFragment(CoordinatesDTO dto);
-	public void ProcessImage(BufferedImage image);
+	public void ProcessImage(BufferedImage image, double degrees);
+	public void setOutputRoute(String route);
 }

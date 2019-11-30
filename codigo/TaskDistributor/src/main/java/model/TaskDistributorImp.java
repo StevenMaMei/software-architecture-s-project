@@ -41,7 +41,7 @@ public class TaskDistributorImp implements TaskDistributor, Subject {
 		observersSet.remove(obs);
 	}
 
-	public void distribute(long idImage, int height, int width, double radians) {
+	public int distribute(long idImage, int height, int width, double radians) {
 		int midHeight= height/2;
 		int midWidth = width/2;
 		int quantOfObservers = observersSet.size();
@@ -59,6 +59,7 @@ public class TaskDistributorImp implements TaskDistributor, Subject {
 		int[][] currCords= null;
 		int indexWithinCurrCords = 0;
 		CoordinatesDTO currDTO =null;
+		int quantOfDTOs = 0;
 
 		for(int i = 0; i < height; i++) {
 			for(int j = 0; j < width; j++) {
@@ -75,6 +76,7 @@ public class TaskDistributorImp implements TaskDistributor, Subject {
 					}
 					
 					currDTO = new CoordinatesDTO(counter, new int[rows][2], radians);
+					quantOfDTOs++;
 					currDTO.setIdImage(idImage);
 					currCords = currDTO.getCoordinates();
 					indexWithinCurrCords = 0;
@@ -92,7 +94,7 @@ public class TaskDistributorImp implements TaskDistributor, Subject {
 		}
 		
 		noti();
-
+		return quantOfDTOs;
 	}
 
 	public ConcurrentLinkedQueue<CoordinatesDTO> getTaskQueue() {
