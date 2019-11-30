@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<composite xmlns="http://www.osoa.org/xmlns/sca/1.0"
+	xmlns:frascati="http://frascati.ow2.org/xmlns/sca/1.1" targetNamespace="http://frascati.ow2.org/mqcafe"
+	name="outputCom">
+
+	<component name="c">
+
+		<implementation.java class="model.OutputImageImp" />
+		
+		<service name="outputImage">
+	      <interface.java interface="interfaces.OutputImage"/>
+	      <frascati:binding.rmi host="localhost" serviceName="rmiServiceOutput" port="1102"> </frascati:binding.rmi>
+	    </service>
+		
+	</component>
+
+
+</composite>

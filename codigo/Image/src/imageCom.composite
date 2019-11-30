@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<composite xmlns="http://www.osoa.org/xmlns/sca/1.0"
+	xmlns:frascati="http://frascati.ow2.org/xmlns/sca/1.1" targetNamespace="http://frascati.ow2.org/mqcafe"
+	name="imageCom">
+
+	<component name="c">
+
+		<implementation.java class="model.ImageHandlerImp" />
+		
+		<service name="imageHandler">
+	      <interface.java interface="interfaces.ImageHandler"/>
+	      <frascati:binding.rmi host="localhost" serviceName="rmiServiceImage" port="1100"> </frascati:binding.rmi>
+	    </service>
+	    
+	    <reference name="outputImage">
+			<interface.java interface="interfaces.OutputImage" />
+			<frascati:binding.rmi host="localhost"
+				serviceName="rmiServiceOutput" port="1102">
+			</frascati:binding.rmi>
+		</reference>
+		
+		<reference name="taskDistributor">
+			<interface.java interface="interfaces.TaskDistributor" />
+			<frascati:binding.rmi host="localhost"
+				serviceName="rmiServiceDistributor" port="1103">
+			</frascati:binding.rmi>
+		</reference>
+		
+	</component>
+
+
+</composite>

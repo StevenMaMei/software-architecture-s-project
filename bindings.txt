@@ -1,0 +1,11 @@
+service name: imageHandler service net: rmiServiceImage
+port 1100
+
+service name: inputImage service net: rmiServiceInput
+port 1101
+
+service name: outputImage service net: rmiServiceOutput
+port 1102
+
+service name: taskDistributor service net: rmiServiceDistributor
+port 1103
