@@ -3,7 +3,6 @@ package model;
 import java.awt.image.BufferedImage;
 import java.util.TreeMap;
 
-import interfaces.ImageHandler;
 
 public class FragmentProcessor implements Runnable {
 

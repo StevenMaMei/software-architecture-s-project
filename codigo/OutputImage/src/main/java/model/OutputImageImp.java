@@ -18,7 +18,8 @@ public class OutputImageImp implements OutputImage {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		
 	}
+
 
 }
