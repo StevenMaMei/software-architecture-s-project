@@ -1,6 +1,5 @@
 package model;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -10,10 +9,10 @@ import interfaces.OutputImage;
 
 public class OutputImageImp implements OutputImage {
 
-	public void saveImage(BufferedImage image, String route) {
+	public void saveImage(ImageWrapper image, String route) {
 		File outputFile = new File(route);
 		try {
-			ImageIO.write(image, "jpg", outputFile);
+			ImageIO.write(image.getImage(), "jpg", outputFile);
 			System.out.println("image writed");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

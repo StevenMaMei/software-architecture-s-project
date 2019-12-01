@@ -14,10 +14,10 @@ import interfaces.InputImage;
 
 public class Controller implements Runnable {
 
-	@Reference
+	@Reference(name="inputImage")
 	private InputImage input;
 	
-	@Reference
+	@Reference(name="imageHandler")
 	private ImageHandler imageToProcess;
 
 	public void run() {
@@ -27,13 +27,16 @@ public class Controller implements Runnable {
 		
 		try {
 			bw.write("Ingrese la ruta de la imagen\n");
+			bw.flush();
 			String inputRoute = br.readLine();
 			bw.write("Ingrese la ruta de salida\n");
+			bw.flush();
 			String outputRoute = br.readLine();
 			BufferedImage image = input.uploadImage(inputRoute);
 			imageToProcess.setOutputRoute(outputRoute);
 			bw.write("Ingrese los grados a rotar");
-			imageToProcess.ProcessImage(image, Double.parseDouble(br.readLine()));
+			bw.flush();
+			imageToProcess.ProcessImage(new ImageWrapper(image), Double.parseDouble(br.readLine()));
 			bw.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

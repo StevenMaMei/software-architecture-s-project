@@ -1,0 +1,23 @@
+D:\Escritorio\semestre_7\arquisoft\proyecto\codigo\TaskDistributor
+frascati compile src TaskDistributor
+frascati run taskDistributorCom -libpath TaskDistributor.jar
+
+D:\Escritorio\semestre_7\arquisoft\proyecto\codigo\InputImage
+frascati compile src InputImage
+frascati run inputCom -libpath InputImage.jar
+
+D:\Escritorio\semestre_7\arquisoft\proyecto\codigo\OutputImage
+frascati compile src OutputImage
+frascati run outputImageCom -libpath OutputImage.jar
+
+D:\Escritorio\semestre_7\arquisoft\proyecto\codigo\Image
+frascati compile src Image
+frascati run imageCom -libpath Image.jar
+
+D:\Escritorio\semestre_7\arquisoft\proyecto\codigo\Rotation
+frascati compile src Rotation
+frascati run rotationCom -libpath Rotation.jar
+
+D:\Escritorio\semestre_7\arquisoft\proyecto\codigo\Controller
+frascati compile src Controller
+frascati run controllerCom -libpath Controller.jar

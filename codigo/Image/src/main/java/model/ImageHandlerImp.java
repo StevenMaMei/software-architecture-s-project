@@ -13,10 +13,10 @@ import interfaces.TaskDistributor;
 
 public class ImageHandlerImp implements ImageHandler {
 	
-	@Reference
+	@Reference(name="taskDistributor")
 	TaskDistributor distributor;
 	
-	@Reference
+	@Reference(name="outputImage")
 	OutputImage outputImage;
 	
 	private TreeMap<Long, BufferedImage> originalImages;
@@ -47,7 +47,8 @@ public class ImageHandlerImp implements ImageHandler {
 		service.execute(processor);
 	}
 
-	public void ProcessImage(BufferedImage image, double degrees) {
+	public void ProcessImage(ImageWrapper ima, double degrees) {
+		BufferedImage image = ima.getImage();
 		originalImages.put(idSequence, image);
 		processedImages.put(idSequence, new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB));
 		quantOfPartsOfAnImage.put(idSequence, distributor.distribute(idSequence, image.getHeight(), image.getWidth(), Math.toRadians(degrees)));
@@ -55,7 +56,7 @@ public class ImageHandlerImp implements ImageHandler {
 	}
 	
 	public void saveImage(long id, String route) {
-		outputImage.saveImage(processedImages.get(id), route);
+		outputImage.saveImage(new ImageWrapper(processedImages.get(id)), route);
 	}
 	public synchronized void addProcessedFragment(long id) {
 		quantOfPartsRecieve.put(id, quantOfPartsRecieve.get(id)+1);

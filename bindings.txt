@@ -12,3 +12,6 @@ port 1103
 
 service name: subject service net: rmiServiceSubject
 por 1104
+
+service name: observer service net: rmiServiceObserver
+port 1105

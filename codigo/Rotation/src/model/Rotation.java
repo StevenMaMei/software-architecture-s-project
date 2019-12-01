@@ -12,9 +12,9 @@ import interfaces.Subject;
 public class Rotation implements Observer{
 	
 	private CoordinatesDTO coordinatesAndInfo;
-	@Reference
+	@Reference(name="subject")
 	private Subject subject;
-	@Reference
+	@Reference(name="imageHandler")
 	private ImageHandler image;
 	
 	@Override
