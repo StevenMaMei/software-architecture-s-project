@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import org.osoa.sca.annotations.Remotable;
 
 import interfaces.Observer;
 import interfaces.Subject;
@@ -19,10 +20,7 @@ public class TaskDistributorImp implements TaskDistributor, Subject {
 	
 	private TreeSet<Observer> observersSet = new TreeSet<Observer>();
 
-	public CoordinatesDTO getState() {
-		System.out.println("returning state");
-		return taskQueue.poll();
-	}
+
 
 	public void noti() {
 		Iterator<Observer> it = observersSet.iterator();
@@ -43,17 +41,18 @@ public class TaskDistributorImp implements TaskDistributor, Subject {
 	public synchronized void attach(Observer obs) {
 		System.out.println("observer trying to attach");
 		System.out.println("quants of observers: "+observersSet.size());
-		try {
-			obs.update();
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		if(taskQueue.size() > 0) {
+			try {
+				obs.update();
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			System.out.println("observer update called");
 		}else {
 			System.out.println("observer added");
-			observersSet.add(obs);
+			System.out.println(observersSet.add(obs));
+			
 		}
 	}
 
@@ -118,6 +117,7 @@ public class TaskDistributorImp implements TaskDistributor, Subject {
 		}
 		System.out.println(taskQueue.size());
 		noti();
+		System.out.println(taskQueue.size());
 		return quantOfDTOs;
 	}
 
@@ -127,6 +127,11 @@ public class TaskDistributorImp implements TaskDistributor, Subject {
 
 	public void setTaskQueue(ConcurrentLinkedQueue<CoordinatesDTO> taskQueue) {
 		this.taskQueue = taskQueue;
+	}
+
+	public CoordinatesDTO getState() {
+		System.out.println("returning state");
+		return taskQueue.poll();
 	}
 
 }

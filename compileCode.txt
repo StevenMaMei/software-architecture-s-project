@@ -18,6 +18,13 @@ D:\Escritorio\semestre_7\arquisoft\proyecto\codigo\Rotation
 frascati compile src Rotation
 frascati run rotationCom -libpath Rotation.jar
 
+D:\Escritorio\semestre_7\arquisoft\proyecto\codigo\RotationConnector
+frascati compile src RotationConnector
+frascati run rotationConnectorCom -libpath RotationConnector.jar -s r -m run
+
 D:\Escritorio\semestre_7\arquisoft\proyecto\codigo\Controller
 frascati compile src Controller
-frascati run controllerCom -libpath Controller.jar
+frascati run controllerCom -libpath Controller.jar -s r -m run
+
+D:\Escritorio\semestre_7\arquisoft\proyecto\foto\1.jpg
+D:\Escritorio\semestre_7\arquisoft\proyecto\fotoProcesada

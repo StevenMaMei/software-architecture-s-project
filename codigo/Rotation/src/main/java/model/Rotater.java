@@ -12,7 +12,7 @@ public class Rotater implements Runnable{
 		this.rotateMatrix = rotateMatrix;
 	}
 	
-	@Override
+
 	public void run() {
 		System.out.println("rotater activado");
 		for(int i = i1; i < i2; i++) {

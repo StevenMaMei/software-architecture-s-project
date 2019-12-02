@@ -23,13 +23,16 @@ public class Rotation implements Observer, IRotation{
 	
 	public void update() {
 		System.out.println("update method called");
-		coordinatesAndInfo = subject.getState();
-		if(coordinatesAndInfo != null) {
+		try {
+			coordinatesAndInfo = subject.getState();
 			performRotation();
 			subject.detach(this);
-		}else {
+			System.out.println("performed");
+		}catch(Exception e) {
 			subject.attach(this);
+			System.out.println("not performed");
 		}
+		
 	}
 	
 	public void attach() {
@@ -38,7 +41,7 @@ public class Rotation implements Observer, IRotation{
 	}
 	
 	public void performRotation() {
-		System.out.println("haciendo rotación");
+		System.out.println("haciendo rotaciï¿½n");
 		double[][] rotationMatrix = calculateRotateMatrix(coordinatesAndInfo.getRadians());
 		int threads = Runtime.getRuntime().availableProcessors();
 		System.out.println(threads);
@@ -104,7 +107,7 @@ public class Rotation implements Observer, IRotation{
 	public void setSubject(Subject subject) {
 		this.subject = subject;
 	}
-	@Override
+
 	public Observer getRotation() {
 		System.out.println("get rotation method");
 		return this;

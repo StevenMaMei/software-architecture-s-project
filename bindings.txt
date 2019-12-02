@@ -15,3 +15,6 @@ por 1104
 
 service name: observer service net: rmiServiceObserver
 port 1105
+
+service name: iRotation service net: rmiServiceIRotation
+port 1106
