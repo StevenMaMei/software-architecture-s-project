@@ -1,35 +1,48 @@
 package model;
 
+import java.rmi.RemoteException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.osoa.sca.annotations.Reference;
 
-import interfaces.IRotation;
+import interfaces.ICoordinatesDTO;
 import interfaces.ImageHandler;
 import interfaces.Observer;
 import interfaces.Subject;
 
-public class Rotation implements Observer, IRotation{
+public class Rotation implements Observer{
 	
 
 	private static final long serialVersionUID = 1L;
-	private CoordinatesDTO coordinatesAndInfo;
+	private ICoordinatesDTO coordinatesAndInfo;
 
 	@Reference(name="subject")
 	private Subject subject;
 	@Reference(name="imageHandler")
 	transient private ImageHandler image;
 	
+	public Subject getSubject() {
+		return subject;
+	}
+
+	public void setSubject(Subject subject) {
+		this.subject = subject;
+	}
+	
 	public void update() {
 		System.out.println("update method called");
 		try {
 			coordinatesAndInfo = subject.getState();
+			System.out.println("llegó");
 			performRotation();
 			subject.detach(this);
 			System.out.println("performed");
 		}catch(Exception e) {
-			subject.attach(this);
+			try {
+				subject.attach(this);
+			} catch (RemoteException e1) {
+			}
 			System.out.println("not performed");
 		}
 		
@@ -37,11 +50,16 @@ public class Rotation implements Observer, IRotation{
 	
 	public void attach() {
 		System.out.println("attaching observer");
-		subject.attach(this);
+		try {
+			subject.attach(this);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void performRotation() {
-		System.out.println("haciendo rotaci�n");
+		System.out.println("haciendo rotacion");
 		double[][] rotationMatrix = calculateRotateMatrix(coordinatesAndInfo.getRadians());
 		int threads = Runtime.getRuntime().availableProcessors();
 		System.out.println(threads);
@@ -92,7 +110,7 @@ public class Rotation implements Observer, IRotation{
 			{sinPhi, cosPhi}};
 	}
 	
-	public CoordinatesDTO getCoordinatesAndInfo() {
+	public ICoordinatesDTO getCoordinatesAndInfo() {
 		return coordinatesAndInfo;
 	}
 
@@ -100,13 +118,7 @@ public class Rotation implements Observer, IRotation{
 		this.coordinatesAndInfo = coordinatesAndInfo;
 	}
 
-	public Subject getSubject() {
-		return subject;
-	}
-
-	public void setSubject(Subject subject) {
-		this.subject = subject;
-	}
+	
 
 	public Observer getRotation() {
 		System.out.println("get rotation method");

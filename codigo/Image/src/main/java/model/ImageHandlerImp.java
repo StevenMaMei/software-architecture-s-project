@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.TreeMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -12,28 +13,29 @@ import javax.imageio.ImageIO;
 
 import org.osoa.sca.annotations.Reference;
 
+import interfaces.ICoordinatesDTO;
 import interfaces.ImageHandler;
 import interfaces.OutputImage;
-import interfaces.TaskDistributor;
+import interfaces.Subject;
 
 public class ImageHandlerImp implements ImageHandler {
 	
-	@Reference(name="taskDistributor")
-	TaskDistributor distributor;
+	@Reference(name="subject")
+	Subject distributor;
 	
 	@Reference(name="outputImage")
 	OutputImage outputImage;
 	
-	private TreeMap<Long, BufferedImage> originalImages;
-	private TreeMap<Long, BufferedImage> processedImages;
-	private TreeMap<Long, Integer> quantOfPartsOfAnImage;
-	private TreeMap<Long, Integer> quantOfPartsRecieve;
+	private static TreeMap<Long, BufferedImage> originalImages;
+	private static TreeMap<Long, BufferedImage> processedImages;
+	private static TreeMap<Long, Integer> quantOfPartsOfAnImage;
+	private static TreeMap<Long, Integer> quantOfPartsRecieve;
 	
-	private long idSequence;
+	private static long idSequence;
 	
-	private String route;
+	private static String route;
 	
-	private ExecutorService service;
+	private static ExecutorService service;
 	
 	public ImageHandlerImp() {
 		originalImages = new TreeMap<Long, BufferedImage>();
@@ -47,7 +49,7 @@ public class ImageHandlerImp implements ImageHandler {
 		service = Executors.newFixedThreadPool(threads);
 	}
 	
-	public void setProcessedFragment(CoordinatesDTO dto) {
+	public void setProcessedFragment(ICoordinatesDTO dto) {
 		System.out.println("poniendo un fragmento...");
 		FragmentProcessor processor = new FragmentProcessor(originalImages.get(dto.getIdImage()), processedImages.get(dto.getIdImage()), quantOfPartsOfAnImage, quantOfPartsRecieve, dto, this);
 		service.execute(processor);
@@ -65,7 +67,12 @@ public class ImageHandlerImp implements ImageHandler {
 		}
 		originalImages.put(idSequence, image);
 		processedImages.put(idSequence, new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB));
-		quantOfPartsOfAnImage.put(idSequence, distributor.distribute(idSequence, image.getHeight(), image.getWidth(), Math.toRadians(degrees)));
+		try {
+			quantOfPartsOfAnImage.put(idSequence, distributor.distribute(idSequence, image.getHeight(), image.getWidth(), Math.toRadians(degrees)));
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		idSequence++;
 	}
 	

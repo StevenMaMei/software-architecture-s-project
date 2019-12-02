@@ -1,24 +1,23 @@
 package model;
 
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.Iterator;
 
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import org.osoa.sca.annotations.Remotable;
-
+import interfaces.ICoordinatesDTO;
 import interfaces.Observer;
 import interfaces.Subject;
-import interfaces.TaskDistributor;
 
-public class TaskDistributorImp implements TaskDistributor, Subject {
+public class TaskDistributorImp implements Subject {
+
 
 	private static final long serialVersionUID = 1L;
 
-	private ConcurrentLinkedQueue<CoordinatesDTO> taskQueue = new ConcurrentLinkedQueue<CoordinatesDTO>();
-	
-	private TreeSet<Observer> observersSet = new TreeSet<Observer>();
+	private static ConcurrentLinkedQueue<ICoordinatesDTO> taskQueue = new ConcurrentLinkedQueue<ICoordinatesDTO>();
+	private static TreeSet<Observer> observersSet = new TreeSet<Observer>();
 
 
 
@@ -38,9 +37,10 @@ public class TaskDistributorImp implements TaskDistributor, Subject {
 		}
 	}
 
-	public synchronized void attach(Observer obs) {
+	public void attach(Observer obs) {
 		System.out.println("observer trying to attach");
 		System.out.println("quants of observers: "+observersSet.size());
+		System.out.println("tasks: "+ taskQueue.size());
 		if(taskQueue.size() > 0) {
 			try {
 				obs.update();
@@ -62,6 +62,7 @@ public class TaskDistributorImp implements TaskDistributor, Subject {
 
 	public int distribute(long idImage, int height, int width, double radians) {
 		System.out.println("orden de distribuir...");
+		System.out.println("current tasks: "+ taskQueue.size());
 		System.out.println("-----------------------------------------------------");
 		System.out.println("Height: "+height + " width: " + width + " radians: " +radians);
 		System.out.println("-----------------------------------------------------");
@@ -121,15 +122,15 @@ public class TaskDistributorImp implements TaskDistributor, Subject {
 		return quantOfDTOs;
 	}
 
-	public ConcurrentLinkedQueue<CoordinatesDTO> getTaskQueue() {
+	public ConcurrentLinkedQueue<ICoordinatesDTO> getTaskQueue() {
 		return taskQueue;
 	}
 
-	public void setTaskQueue(ConcurrentLinkedQueue<CoordinatesDTO> taskQueue) {
+	public void setTaskQueue(ConcurrentLinkedQueue<ICoordinatesDTO> taskQueue) {
 		this.taskQueue = taskQueue;
 	}
 
-	public CoordinatesDTO getState() {
+	public ICoordinatesDTO getState() {
 		System.out.println("returning state");
 		return taskQueue.poll();
 	}

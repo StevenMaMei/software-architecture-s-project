@@ -2,7 +2,9 @@ package model;
 
 import java.io.Serializable;
 
-public class CoordinatesDTO implements Serializable{
+import interfaces.ICoordinatesDTO;
+
+public class CoordinatesDTO implements ICoordinatesDTO{
 	
 
 	private static final long serialVersionUID = 1L;

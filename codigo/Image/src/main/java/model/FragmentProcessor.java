@@ -3,6 +3,8 @@ package model;
 import java.awt.image.BufferedImage;
 import java.util.TreeMap;
 
+import interfaces.ICoordinatesDTO;
+
 
 public class FragmentProcessor implements Runnable {
 
@@ -10,9 +12,9 @@ public class FragmentProcessor implements Runnable {
 	private BufferedImage processingImage;
 	private TreeMap<Long, Integer> quantOfPartsOfAnImage;
 	private TreeMap<Long, Integer> quantOfPartsRecieve;
-	private CoordinatesDTO dto;
+	private ICoordinatesDTO dto;
 	private ImageHandlerImp imageHandler;
-	public FragmentProcessor(BufferedImage origImage, BufferedImage procImage, TreeMap<Long, Integer> quantOfParts, TreeMap<Long, Integer> partsReceiv, CoordinatesDTO dto, ImageHandlerImp imgHandler) {
+	public FragmentProcessor(BufferedImage origImage, BufferedImage procImage, TreeMap<Long, Integer> quantOfParts, TreeMap<Long, Integer> partsReceiv, ICoordinatesDTO dto, ImageHandlerImp imgHandler) {
 		originalImage = origImage;
 		processingImage = procImage;
 		quantOfPartsOfAnImage = quantOfParts;

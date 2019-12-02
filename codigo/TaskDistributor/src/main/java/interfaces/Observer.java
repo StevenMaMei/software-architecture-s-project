@@ -11,4 +11,5 @@ import org.osoa.sca.annotations.Service;
 public interface Observer extends Remote,Serializable {
 
 	public void update()throws java.rmi.RemoteException;
+	public void attach()throws java.rmi.RemoteException;
 }

@@ -7,10 +7,6 @@
 
 		<implementation.java class="model.TaskDistributorImp" />
 		
-		<service name="taskDistributor">
-	      <interface.java interface="interfaces.TaskDistributor"/>
-	      <frascati:binding.rmi host="localhost" serviceName="rmiServiceDistributor" port="1103"> </frascati:binding.rmi>
-	    </service>
 	    
 	    <service name="subject">
 	      <interface.java interface="interfaces.Subject"/>

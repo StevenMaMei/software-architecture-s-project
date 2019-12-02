@@ -19,9 +19,16 @@ public class Controller implements Runnable {
 	@Reference(name="inputImage")
 	private InputImage input;
 	
+	public void setInput(InputImage input) {
+		this.input = input;
+	}
+	
 	@Reference(name="imageHandler")
 	private ImageHandler imageToProcess;
-
+	
+	public void setImageToProcess(ImageHandler imageToProcess) {
+		this.imageToProcess = imageToProcess;
+	}
 	public void run() {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -45,4 +52,6 @@ public class Controller implements Runnable {
 			e.printStackTrace();
 		}
 	}
+
+	
 }
