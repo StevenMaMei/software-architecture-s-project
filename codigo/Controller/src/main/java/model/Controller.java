@@ -9,11 +9,12 @@ import java.io.OutputStreamWriter;
 
 
 import org.osoa.sca.annotations.Reference;
+import org.osoa.sca.annotations.Scope;
 
 import interfaces.ImageHandler;
 import interfaces.InputImage;
 
-
+@Scope("COMPOSITE")
 public class Controller implements Runnable {
 
 	@Reference(name="inputImage")

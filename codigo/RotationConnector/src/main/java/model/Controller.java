@@ -1,12 +1,11 @@
 package model;
 
-import java.rmi.RemoteException;
-
 import org.osoa.sca.annotations.Reference;
+import org.osoa.sca.annotations.Scope;
 
 import interfaces.Observer;
 import interfaces.Subject;
-
+@Scope("COMPOSITE")
 public class Controller implements Runnable {
 
 	@Reference(name="subject")
@@ -16,12 +15,9 @@ public class Controller implements Runnable {
 	private Observer rotation;
 
 	public void run() {
-		try {
+
 			rotation.attach();
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
 		System.out.println("attach sent");
 	}
 	

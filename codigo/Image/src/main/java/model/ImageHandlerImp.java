@@ -4,7 +4,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.rmi.RemoteException;
 import java.util.TreeMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -12,12 +11,13 @@ import java.util.concurrent.Executors;
 import javax.imageio.ImageIO;
 
 import org.osoa.sca.annotations.Reference;
+import org.osoa.sca.annotations.Scope;
 
 import interfaces.ICoordinatesDTO;
 import interfaces.ImageHandler;
 import interfaces.OutputImage;
 import interfaces.Subject;
-
+@Scope("COMPOSITE")
 public class ImageHandlerImp implements ImageHandler {
 	
 	@Reference(name="subject")
@@ -67,12 +67,8 @@ public class ImageHandlerImp implements ImageHandler {
 		}
 		originalImages.put(idSequence, image);
 		processedImages.put(idSequence, new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB));
-		try {
-			quantOfPartsOfAnImage.put(idSequence, distributor.distribute(idSequence, image.getHeight(), image.getWidth(), Math.toRadians(degrees)));
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		quantOfPartsOfAnImage.put(idSequence, distributor.distribute(idSequence, image.getHeight(), image.getWidth(), Math.toRadians(degrees)));
+		
 		idSequence++;
 	}
 	

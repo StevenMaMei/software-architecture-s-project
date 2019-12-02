@@ -7,8 +7,10 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import interfaces.OutputImage;
+import org.osoa.sca.annotations.Scope;
 
+import interfaces.OutputImage;
+@Scope("COMPOSITE")
 public class OutputImageImp implements OutputImage {
 
 	public void saveImage(byte[] image, String route) {

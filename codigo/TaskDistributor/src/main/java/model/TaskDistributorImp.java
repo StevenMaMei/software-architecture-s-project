@@ -1,58 +1,49 @@
 package model;
 
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
-import java.util.Iterator;
-
-import java.util.TreeSet;
+import java.util.TreeMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
+
+import org.osoa.sca.annotations.Scope;
 
 import interfaces.ICoordinatesDTO;
 import interfaces.Observer;
 import interfaces.Subject;
-
+@Scope("COMPOSITE")
 public class TaskDistributorImp implements Subject {
-
 
 	private static final long serialVersionUID = 1L;
 
 	private static ConcurrentLinkedQueue<ICoordinatesDTO> taskQueue = new ConcurrentLinkedQueue<ICoordinatesDTO>();
-	private static TreeSet<Observer> observersSet = new TreeSet<Observer>();
-
-
+	private static TreeMap<Integer, Observer> observersSet = new TreeMap<Integer, Observer>();
 
 	public void noti() {
-		Iterator<Observer> it = observersSet.iterator();
 		System.out.println("Notify called");
 		int count = 0;
 		int totalTasks = taskQueue.size();
-		while(it.hasNext() && count < totalTasks) {
-			System.out.println("calling update");
-			try {
-				it.next().update();
-			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		for (Observer o : observersSet.values()) {
+			if (count++ < totalTasks) {
+
+				o.update(this);
+
+			} else {
+				return;
 			}
 		}
 	}
 
 	public void attach(Observer obs) {
 		System.out.println("observer trying to attach");
-		System.out.println("quants of observers: "+observersSet.size());
-		System.out.println("tasks: "+ taskQueue.size());
-		if(taskQueue.size() > 0) {
-			try {
-				obs.update();
-			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		System.out.println("quants of observers: " + observersSet.size());
+		System.out.println("tasks: " + taskQueue.size());
+		if (taskQueue.size() > 0) {
+
+			obs.update(this);
 			System.out.println("observer update called");
-		}else {
+		} else {
 			System.out.println("observer added");
-			System.out.println(observersSet.add(obs));
-			
+
+			System.out.println(observersSet.put(obs.getId(), obs));
+
 		}
 	}
 
@@ -62,57 +53,57 @@ public class TaskDistributorImp implements Subject {
 
 	public int distribute(long idImage, int height, int width, double radians) {
 		System.out.println("orden de distribuir...");
-		System.out.println("current tasks: "+ taskQueue.size());
+		System.out.println("current tasks: " + taskQueue.size());
 		System.out.println("-----------------------------------------------------");
-		System.out.println("Height: "+height + " width: " + width + " radians: " +radians);
+		System.out.println("Height: " + height + " width: " + width + " radians: " + radians);
 		System.out.println("-----------------------------------------------------");
-		int midHeight= height/2;
-		int midWidth = width/2;
+		int midHeight = height / 2;
+		int midWidth = width / 2;
 		int quantOfObservers = observersSet.size();
-		
-		if(quantOfObservers <= 4) {
+
+		if (quantOfObservers <= 4) {
 			quantOfObservers = 4;
-		}else {
+		} else {
 			quantOfObservers *= 2;
 		}
-		
-		int quantOfCoordinates = height * width;	
-		int delta = (int) Math.ceil((quantOfCoordinates*1.0)/quantOfObservers);
+
+		int quantOfCoordinates = height * width;
+		int delta = (int) Math.ceil((quantOfCoordinates * 1.0) / quantOfObservers);
 		int counter = 0;
-		
-		int[][] currCords= null;
+
+		int[][] currCords = null;
 		int indexWithinCurrCords = 0;
-		CoordinatesDTO currDTO =null;
+		CoordinatesDTO currDTO = null;
 		int quantOfDTOs = 0;
 
-		for(int i = 0; i < height; i++) {
-			for(int j = 0; j < width; j++) {
-				
-				if(counter == 0 || (counter)%delta == 0) {
-					
-					int rows =delta;
-					if(quantOfCoordinates - (counter) < delta) {
+		for (int i = 0; i < height; i++) {
+			for (int j = 0; j < width; j++) {
+
+				if (counter == 0 || (counter) % delta == 0) {
+
+					int rows = delta;
+					if (quantOfCoordinates - (counter) < delta) {
 						rows = quantOfCoordinates - (counter);
 					}
-					
-					if(currDTO != null) {
+
+					if (currDTO != null) {
 						taskQueue.add(currDTO);
 					}
-					
+
 					currDTO = new CoordinatesDTO(counter, new int[rows][2], radians);
 					quantOfDTOs++;
 					currDTO.setIdImage(idImage);
 					currCords = currDTO.getCoordinates();
 					indexWithinCurrCords = 0;
-					
+
 				}
-				
+
 				currCords[indexWithinCurrCords][0] = j - midWidth;
 				currCords[indexWithinCurrCords][1] = i - midHeight;
 				indexWithinCurrCords++;
 				counter++;
-				
-				if( i + 1 == height && j+1 == width)
+
+				if (i + 1 == height && j + 1 == width)
 					taskQueue.add(currDTO);
 			}
 		}

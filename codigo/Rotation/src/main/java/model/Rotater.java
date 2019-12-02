@@ -18,10 +18,10 @@ public class Rotater implements Runnable{
 		for(int i = i1; i < i2; i++) {
 			int x1 = (int) Math.round(coord[i][0]*rotateMatrix[0][0] + coord[i][1]*rotateMatrix[0][1]);
 			int y1 = (int) Math.round(coord[i][0]*rotateMatrix[1][0] + coord[i][1]*rotateMatrix[1][1]);
-			
 			coord[i][0] = x1;
 			coord[i][1] = y1;
 		}
+		System.out.println("rotater terminado");
 	}
 
 }

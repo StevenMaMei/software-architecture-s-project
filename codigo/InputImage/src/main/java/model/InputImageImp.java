@@ -11,8 +11,10 @@ import javax.imageio.ImageReadParam;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
 
-import interfaces.InputImage;
+import org.osoa.sca.annotations.Scope;
 
+import interfaces.InputImage;
+@Scope("COMPOSITE")
 public class InputImageImp implements InputImage {
 
 	//code got from moodle

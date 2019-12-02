@@ -1,22 +1,23 @@
 package model;
 
-import java.rmi.RemoteException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.osoa.sca.annotations.Reference;
+import org.osoa.sca.annotations.Scope;
 
 import interfaces.ICoordinatesDTO;
 import interfaces.ImageHandler;
 import interfaces.Observer;
 import interfaces.Subject;
-
+@Scope("COMPOSITE")
 public class Rotation implements Observer{
 	
 
 	private static final long serialVersionUID = 1L;
+	private static int idSequence = 0;
 	private ICoordinatesDTO coordinatesAndInfo;
-
+	private int id = idSequence++;
 	@Reference(name="subject")
 	private Subject subject;
 	@Reference(name="imageHandler")
@@ -30,19 +31,19 @@ public class Rotation implements Observer{
 		this.subject = subject;
 	}
 	
-	public void update() {
+	public void update(Subject subject) {
 		System.out.println("update method called");
 		try {
 			coordinatesAndInfo = subject.getState();
 			System.out.println("llegó");
+			
 			performRotation();
 			subject.detach(this);
 			System.out.println("performed");
 		}catch(Exception e) {
-			try {
-				subject.attach(this);
-			} catch (RemoteException e1) {
-			}
+
+			subject.attach(this);
+
 			System.out.println("not performed");
 		}
 		
@@ -50,16 +51,14 @@ public class Rotation implements Observer{
 	
 	public void attach() {
 		System.out.println("attaching observer");
-		try {
-			subject.attach(this);
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
+		subject.attach(this);
+
 	}
 	
 	public void performRotation() {
 		System.out.println("haciendo rotacion");
+		
 		double[][] rotationMatrix = calculateRotateMatrix(coordinatesAndInfo.getRadians());
 		int threads = Runtime.getRuntime().availableProcessors();
 		System.out.println(threads);
@@ -88,13 +87,16 @@ public class Rotation implements Observer{
 		}
 		service.shutdown();
 		while(!service.isTerminated()) {
-			image.setProcessedFragment(coordinatesAndInfo);
 			try {
 				Thread.sleep(50);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
+		image.setProcessedFragment(coordinatesAndInfo);
+		System.out.println("terminó de rotar");
+		attach();
+		System.out.println("se hizo otra vez el attach luego de terminar");
 	}
 	
 	/**
@@ -124,6 +126,14 @@ public class Rotation implements Observer{
 		System.out.println("get rotation method");
 		return this;
 	}
+
+	public int getId() {
+		return id;
+	}
+
+
+
+
 
 	
 }
