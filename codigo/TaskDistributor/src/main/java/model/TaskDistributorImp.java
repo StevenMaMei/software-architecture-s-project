@@ -1,9 +1,11 @@
 package model;
 
+import java.rmi.RemoteException;
 import java.util.Iterator;
-import java.util.TreeMap;
+
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentLinkedQueue;
+
 
 import interfaces.Observer;
 import interfaces.Subject;
@@ -11,30 +13,46 @@ import interfaces.TaskDistributor;
 
 public class TaskDistributorImp implements TaskDistributor, Subject {
 
-	private ConcurrentLinkedQueue<CoordinatesDTO> taskQueue;
-	private TreeSet<Observer> observersSet;
+	private static final long serialVersionUID = 1L;
+
+	private ConcurrentLinkedQueue<CoordinatesDTO> taskQueue = new ConcurrentLinkedQueue<CoordinatesDTO>();
 	
-	public TaskDistributorImp() {
-		taskQueue = new ConcurrentLinkedQueue<CoordinatesDTO>();
-		observersSet = new TreeSet<Observer>();
-	}
+	private TreeSet<Observer> observersSet = new TreeSet<Observer>();
+
 	public CoordinatesDTO getState() {
+		System.out.println("returning state");
 		return taskQueue.poll();
 	}
 
 	public void noti() {
 		Iterator<Observer> it = observersSet.iterator();
+		System.out.println("Notify called");
 		int count = 0;
 		int totalTasks = taskQueue.size();
 		while(it.hasNext() && count < totalTasks) {
-			it.next().update();
+			System.out.println("calling update");
+			try {
+				it.next().update();
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
 	public synchronized void attach(Observer obs) {
-		if(taskQueue.size() > 0) {
+		System.out.println("observer trying to attach");
+		System.out.println("quants of observers: "+observersSet.size());
+		try {
 			obs.update();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if(taskQueue.size() > 0) {
+			System.out.println("observer update called");
 		}else {
+			System.out.println("observer added");
 			observersSet.add(obs);
 		}
 	}
@@ -44,6 +62,10 @@ public class TaskDistributorImp implements TaskDistributor, Subject {
 	}
 
 	public int distribute(long idImage, int height, int width, double radians) {
+		System.out.println("orden de distribuir...");
+		System.out.println("-----------------------------------------------------");
+		System.out.println("Height: "+height + " width: " + width + " radians: " +radians);
+		System.out.println("-----------------------------------------------------");
 		int midHeight= height/2;
 		int midWidth = width/2;
 		int quantOfObservers = observersSet.size();
@@ -94,7 +116,7 @@ public class TaskDistributorImp implements TaskDistributor, Subject {
 					taskQueue.add(currDTO);
 			}
 		}
-		
+		System.out.println(taskQueue.size());
 		noti();
 		return quantOfDTOs;
 	}

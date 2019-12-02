@@ -1,6 +1,7 @@
 package model;
 
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
@@ -15,7 +16,8 @@ import interfaces.InputImage;
 public class InputImageImp implements InputImage {
 
 	//code got from moodle
-	public BufferedImage uploadImage(String route) {
+	public byte[] uploadImage(String route) {
+		System.out.println("leyendo imagen...");
 		BufferedImage image = null;
 		try {
 			ImageInputStream input = ImageIO.createImageInputStream(new File(route));
@@ -41,7 +43,15 @@ public class InputImageImp implements InputImage {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return image;
+		 ByteArrayOutputStream bos = new ByteArrayOutputStream();
+	     try {
+			ImageIO.write(image, "jpg", bos );
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	     byte [] data = bos.toByteArray();
+	     return data;
+		
 	}
 
 }

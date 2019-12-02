@@ -7,7 +7,7 @@
 
 		<implementation.java class="model.OutputImageImp" />
 		
-		<service name="outputImage">
+	<service name="outputImage">
 	      <interface.java interface="interfaces.OutputImage"/>
 	      <frascati:binding.rmi host="localhost" serviceName="rmiServiceOutput" port="1102"> </frascati:binding.rmi>
 	    </service>

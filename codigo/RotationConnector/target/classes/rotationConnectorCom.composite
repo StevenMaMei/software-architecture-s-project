@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<composite xmlns="http://www.osoa.org/xmlns/sca/1.0"
+	xmlns:frascati="http://frascati.ow2.org/xmlns/sca/1.1" targetNamespace="http://frascati.ow2.org/mqcafe"
+	name="rotationCom">
+
+	<component name="c">
+
+		<implementation.java class="model.Controller" />
+		<service name="r">
+			<interface.java interface="java.lang.Runnable" />
+		</service>
+		
+	    <reference name="iRotation">
+			<interface.java interface="interfaces.IRotation" />
+			<frascati:binding.rmi host="localhost"
+				serviceName="rmiServiceIRotation" port="1106">
+			</frascati:binding.rmi>
+		</reference>
+	    <reference name="subject">
+			<interface.java interface="interfaces.Subject" />
+			<frascati:binding.rmi host="localhost"
+				serviceName="rmiServiceSubject" port="1104">
+			</frascati:binding.rmi>
+		</reference>
+		
+	</component>
+	
+	<service name="r" promote="c/r">
+		<interface.java interface="java.lang.Runnable"></interface.java>
+	</service>
+
+</composite>
