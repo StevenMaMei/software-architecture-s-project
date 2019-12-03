@@ -26,14 +26,14 @@ public class ImageHandlerImp implements ImageHandler {
 	@Reference(name="outputImage")
 	OutputImage outputImage;
 	
-	private static TreeMap<Long, BufferedImage> originalImages;
+	private static  TreeMap<Long, BufferedImage> originalImages;
 	private static TreeMap<Long, BufferedImage> processedImages;
 	private static TreeMap<Long, Integer> quantOfPartsOfAnImage;
 	private static TreeMap<Long, Integer> quantOfPartsRecieve;
 	
-	private static long idSequence;
+	private long idSequence;
 	
-	private static String route;
+	String route;
 	
 	private static ExecutorService service;
 	
@@ -47,9 +47,10 @@ public class ImageHandlerImp implements ImageHandler {
 		
 		int threads = Runtime.getRuntime().availableProcessors();
 		service = Executors.newFixedThreadPool(threads);
+		service.execute(new SaverSupervisor(quantOfPartsOfAnImage, quantOfPartsRecieve, this));
 	}
 	
-	public void setProcessedFragment(ICoordinatesDTO dto) {
+	public synchronized void setProcessedFragment(ICoordinatesDTO dto) {
 		System.out.println("poniendo un fragmento...");
 		FragmentProcessor processor = new FragmentProcessor(originalImages.get(dto.getIdImage()), processedImages.get(dto.getIdImage()), quantOfPartsOfAnImage, quantOfPartsRecieve, dto, this);
 		service.execute(processor);
@@ -67,7 +68,9 @@ public class ImageHandlerImp implements ImageHandler {
 		}
 		originalImages.put(idSequence, image);
 		processedImages.put(idSequence, new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB));
+		quantOfPartsRecieve.put(idSequence, 0);
 		quantOfPartsOfAnImage.put(idSequence, distributor.distribute(idSequence, image.getHeight(), image.getWidth(), Math.toRadians(degrees)));
+		System.out.println("mirando si se guarda "+quantOfPartsRecieve.get(idSequence));
 		
 		idSequence++;
 	}
@@ -77,16 +80,24 @@ public class ImageHandlerImp implements ImageHandler {
 		BufferedImage image = processedImages.get(id);
 		 ByteArrayOutputStream bos = new ByteArrayOutputStream();
 	     try {
-			ImageIO.write(image, "jpg", bos );
+			ImageIO.write(image, "png", bos );
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	     byte [] data = bos.toByteArray();
-		outputImage.saveImage(data, route);
+		outputImage.saveImage(data, route+"/"+id+".tif");
+		originalImages.remove(id);
+		processedImages.remove(id);
+		quantOfPartsOfAnImage.remove(id);
+		quantOfPartsRecieve.remove(id);
 	}
 	public synchronized void addProcessedFragment(long id) {
+		System.out.println("id "+id);
+		System.out.println("1");
 		quantOfPartsRecieve.put(id, quantOfPartsRecieve.get(id)+1);
+		System.out.println("2");
 		if(quantOfPartsRecieve.get(id) == quantOfPartsOfAnImage.get(id)) {
+			System.out.println("3");
 			saveImage(id, route);
 		}
 	}

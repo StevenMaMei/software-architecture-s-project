@@ -1,21 +1,39 @@
 package model;
 
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutorService;
 
+import javax.swing.tree.FixedHeightLayoutCache;
+
+import org.osoa.sca.annotations.Callback;
+import org.osoa.sca.annotations.Property;
 import org.osoa.sca.annotations.Scope;
 
 import interfaces.ICoordinatesDTO;
 import interfaces.Observer;
 import interfaces.Subject;
+
 @Scope("COMPOSITE")
 public class TaskDistributorImp implements Subject {
 
 	private static final long serialVersionUID = 1L;
 
 	private static ConcurrentLinkedQueue<ICoordinatesDTO> taskQueue = new ConcurrentLinkedQueue<ICoordinatesDTO>();
-	private static TreeMap<Integer, Observer> observersSet = new TreeMap<Integer, Observer>();
+	private static TreeMap<String, Observer> observersSet = new TreeMap<String, Observer>();
 
+	@Property(name = "subject")
+	String rmiBinding;
+
+
+	public TaskDistributorImp() {
+		Thread t = new Thread(new AutomatedNotifier(this));
+		t.start();
+	}
 	public void noti() {
 		System.out.println("Notify called");
 		int count = 0;
@@ -23,13 +41,26 @@ public class TaskDistributorImp implements Subject {
 		for (Observer o : observersSet.values()) {
 			if (count++ < totalTasks) {
 
-				o.update(this);
-
+				try {
+					Observer currObser = (Observer) Naming.lookup(o.getBinding());
+					currObser.update(this);
+					observersSet.remove(currObser.getBinding());
+				} catch (MalformedURLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (NotBoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			} else {
 				return;
 			}
 		}
 	}
+
 
 	public void attach(Observer obs) {
 		System.out.println("observer trying to attach");
@@ -37,18 +68,32 @@ public class TaskDistributorImp implements Subject {
 		System.out.println("tasks: " + taskQueue.size());
 		if (taskQueue.size() > 0) {
 
-			obs.update(this);
+			Observer currObser;
+			try {
+				currObser = (Observer) Naming.lookup(obs.getBinding());
+				currObser.update(this);
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NotBoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			System.out.println("observer update called");
 		} else {
 			System.out.println("observer added");
 
-			System.out.println(observersSet.put(obs.getId(), obs));
+			System.out.println(observersSet.put(obs.getBinding(), obs));
 
 		}
 	}
 
 	public void detach(Observer obs) {
-		observersSet.remove(obs);
+		observersSet.remove(obs.getBinding());
 	}
 
 	public int distribute(long idImage, int height, int width, double radians) {
@@ -108,7 +153,7 @@ public class TaskDistributorImp implements Subject {
 			}
 		}
 		System.out.println(taskQueue.size());
-		noti();
+//		noti();
 		System.out.println(taskQueue.size());
 		return quantOfDTOs;
 	}
@@ -124,6 +169,10 @@ public class TaskDistributorImp implements Subject {
 	public ICoordinatesDTO getState() {
 		System.out.println("returning state");
 		return taskQueue.poll();
+	}
+
+	public String getBinding() {
+		return rmiBinding;
 	}
 
 }

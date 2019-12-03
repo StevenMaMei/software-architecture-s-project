@@ -19,13 +19,17 @@ public class OutputImageImp implements OutputImage {
 		ByteArrayInputStream bis = new ByteArrayInputStream(image);
 	     BufferedImage imgToWrite = null;
 		try {
+			
 			imgToWrite = ImageIO.read(bis);
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		try {
-			ImageIO.write(imgToWrite, "jpg", outputFile);
+			
+			ImageIO.write(imgToWrite, "png", outputFile);
+			imgToWrite.flush();
+			imgToWrite = null;
 			System.out.println("image writed");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

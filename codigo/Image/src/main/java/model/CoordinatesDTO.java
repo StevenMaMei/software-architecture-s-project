@@ -1,7 +1,5 @@
 package model;
 
-import java.io.Serializable;
-
 import interfaces.ICoordinatesDTO;
 
 public class CoordinatesDTO implements ICoordinatesDTO{

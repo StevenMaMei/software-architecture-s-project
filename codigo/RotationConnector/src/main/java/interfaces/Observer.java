@@ -13,4 +13,5 @@ public interface Observer extends Serializable {
 	public void update(Subject subject);
 	public void attach();
 	public int getId();
+	public String getBinding();
 }

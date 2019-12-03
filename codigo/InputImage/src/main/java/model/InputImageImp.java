@@ -47,11 +47,14 @@ public class InputImageImp implements InputImage {
 		}
 		 ByteArrayOutputStream bos = new ByteArrayOutputStream();
 	     try {
+	    	 
 			ImageIO.write(image, "jpg", bos );
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	     byte [] data = bos.toByteArray();
+	     image.flush();
+	     image = null;
 	     return data;
 		
 	}

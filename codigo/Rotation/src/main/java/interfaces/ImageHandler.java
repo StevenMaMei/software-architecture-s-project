@@ -1,6 +1,7 @@
 package interfaces;
 
 
+import org.osoa.sca.annotations.Callback;
 import org.osoa.sca.annotations.Scope;
 import org.osoa.sca.annotations.Service;
 @Service

@@ -1,8 +1,10 @@
 package model;
 
+import java.rmi.Naming;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.osoa.sca.annotations.Property;
 import org.osoa.sca.annotations.Reference;
 import org.osoa.sca.annotations.Scope;
 
@@ -23,6 +25,12 @@ public class Rotation implements Observer{
 	@Reference(name="imageHandler")
 	transient private ImageHandler image;
 	
+	static ExecutorService service;
+	int threads;
+	@Property(name="observer")
+	String rmiBinding;
+	
+
 	public Subject getSubject() {
 		return subject;
 	}
@@ -30,20 +38,19 @@ public class Rotation implements Observer{
 	public void setSubject(Subject subject) {
 		this.subject = subject;
 	}
-	
-	public void update(Subject subject) {
+	public void update(Subject sub) {
 		System.out.println("update method called");
 		try {
+			subject = (Subject)Naming.lookup(sub.getBinding());
 			coordinatesAndInfo = subject.getState();
 			System.out.println("llegó");
-			
-			performRotation();
 			subject.detach(this);
+			performRotation();
+			subject.attach(this);
 			System.out.println("performed");
 		}catch(Exception e) {
-
+			e.printStackTrace();
 			subject.attach(this);
-
 			System.out.println("not performed");
 		}
 		
@@ -60,18 +67,17 @@ public class Rotation implements Observer{
 		System.out.println("haciendo rotacion");
 		
 		double[][] rotationMatrix = calculateRotateMatrix(coordinatesAndInfo.getRadians());
-		int threads = Runtime.getRuntime().availableProcessors();
-		System.out.println(threads);
 		int delta = 0;
 		int quantOfCoords = coordinatesAndInfo.getCoordinates().length; 
-		
+		service = null;
+		threads = Runtime.getRuntime().availableProcessors();
+		service = Executors.newFixedThreadPool(threads);
 		if(threads > quantOfCoords) {
 			threads = quantOfCoords;
 		}
 		
 		delta = (int) Math.ceil((quantOfCoords*1.0)/threads);
 		
-		ExecutorService service = Executors.newFixedThreadPool(threads);
 		int i = 0;
 		while(i < quantOfCoords) {
 			i += delta;
@@ -94,9 +100,8 @@ public class Rotation implements Observer{
 			}
 		}
 		image.setProcessedFragment(coordinatesAndInfo);
+		coordinatesAndInfo = null;
 		System.out.println("terminó de rotar");
-		attach();
-		System.out.println("se hizo otra vez el attach luego de terminar");
 	}
 	
 	/**
@@ -129,6 +134,9 @@ public class Rotation implements Observer{
 
 	public int getId() {
 		return id;
+	}
+	public String getBinding() {
+		return rmiBinding;
 	}
 
 
