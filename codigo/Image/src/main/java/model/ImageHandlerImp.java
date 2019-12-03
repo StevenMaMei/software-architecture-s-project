@@ -80,12 +80,19 @@ public class ImageHandlerImp implements ImageHandler {
 		BufferedImage image = processedImages.get(id);
 		 ByteArrayOutputStream bos = new ByteArrayOutputStream();
 	     try {
-			ImageIO.write(image, "png", bos );
+			ImageIO.write(image, "jpg", bos );
+			bos.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	     byte [] data = bos.toByteArray();
-		outputImage.saveImage(data, route+"/"+id+".tif");
+	     try {
+			bos.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		outputImage.saveImage(data, route+"/"+id+".jpg");
 		originalImages.remove(id);
 		processedImages.remove(id);
 		quantOfPartsOfAnImage.remove(id);

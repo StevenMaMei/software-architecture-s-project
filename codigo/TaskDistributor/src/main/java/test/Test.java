@@ -10,7 +10,7 @@ public class Test {
 
 	public static void main(String[] args) throws RemoteException {
 		TaskDistributorImp task= new TaskDistributorImp();
-		int height = 500;
+		int height = 40;
 		int width = 40;
 		int midHeight = height/2;
 		int midWidth = width/2;
@@ -18,9 +18,9 @@ public class Test {
 		ICoordinatesDTO curr = task.getTaskQueue().poll();
 		while(curr != null) {
 			int[][] coors = curr.getCoordinates();
-			
+			System.out.println("jejejej"+ curr.getInitialPositionWithinOriginalMatrix());
 			for(int i = 0; i < coors.length; i++) {
-				System.out.println((coors[i][0]+midWidth) +" "+ (coors[i][1]+midHeight));
+//				System.out.println((coors[i][0]+midWidth) +" "+ (coors[i][1]+midHeight));
 			}
 			
 			curr = task.getTaskQueue().poll();

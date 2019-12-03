@@ -32,11 +32,14 @@ public class FragmentProcessor implements Runnable {
 		for(int i = 0; i < coords.length; i++) {
 			int x = coords[i][0] + mWidth;
 			int y = coords[i][1] + mHeight;
-			int xOrig = index%width;
-			int yOrig = index/height;
-			if(x > -1 && y > -1 && x < width && y < height ) {
+			int xOrig = (int) Math.floor((index + i)%width);
+			int yOrig = (int) Math.floor((index + i)/height);
+			if(x > -1 && y > -1 && x < width && y < height && xOrig > -1 && yOrig > -1 && xOrig < width && yOrig < height ) {
+//				System.out.println("xOrig "+xOrig+" yOrig: "+yOrig);
+				
 				processingImage.setRGB(x, y, originalImage.getRGB(xOrig, yOrig));
 			}
+			
 		}
 		imageHandler.addProcessedFragment(dto.getIdImage());
 	}

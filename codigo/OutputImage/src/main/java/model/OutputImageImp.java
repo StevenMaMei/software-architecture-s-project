@@ -27,7 +27,7 @@ public class OutputImageImp implements OutputImage {
 		}
 		try {
 			
-			ImageIO.write(imgToWrite, "png", outputFile);
+			ImageIO.write(imgToWrite, "jpg", outputFile);
 			imgToWrite.flush();
 			imgToWrite = null;
 			System.out.println("image writed");
