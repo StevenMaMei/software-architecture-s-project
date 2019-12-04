@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<composite xmlns="http://www.osoa.org/xmlns/sca/1.0"
+	xmlns:frascati="http://frascati.ow2.org/xmlns/sca/1.1" 
+	name="inputCom">
+
+	<component name="c">
+
+		<implementation.java class="model.InputImageImp" />
+		
+		<service name="inputImage">
+	      <interface.java interface="interfaces.InputImage"/>
+	      <frascati:binding.rmi host="localhost" serviceName="rmiServiceInput" port="1101"> </frascati:binding.rmi>
+	    </service>
+		
+	</component>
+
+
+</composite>

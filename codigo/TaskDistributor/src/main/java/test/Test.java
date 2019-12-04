@@ -10,8 +10,8 @@ public class Test {
 
 	public static void main(String[] args) throws RemoteException {
 		TaskDistributorImp task= new TaskDistributorImp();
-		int height = 40;
-		int width = 40;
+		int height = 1280;
+		int width = 720;
 		int midHeight = height/2;
 		int midWidth = width/2;
 		task.distribute(1, height, width, 1.0);

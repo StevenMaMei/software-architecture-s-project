@@ -39,10 +39,13 @@ public class Controller implements Runnable {
 			bw.write("Ingrese la ruta de la imagen\n");
 			bw.flush();
 			String inputRoute = br.readLine();
+			bw.write("Ingrese el formato\n");
+			bw.flush();
+			String format = br.readLine();
 			bw.write("Ingrese la ruta de salida\n");
 			bw.flush();
 			String outputRoute = br.readLine();
-			byte[] imageToSend = input.uploadImage(inputRoute);
+			byte[] imageToSend = input.uploadImage(inputRoute,format);
 			imageToProcess.setOutputRoute(outputRoute);
 			bw.write("Ingrese los grados a rotar\n");
 			bw.flush();

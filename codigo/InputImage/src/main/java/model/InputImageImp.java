@@ -19,7 +19,7 @@ import interfaces.InputImage;
 public class InputImageImp implements InputImage {
 
 	// code got from moodle
-	public byte[] uploadImage(String route) {
+	public byte[] uploadImage(String route,String format) {
 		System.out.println("leyendo imagen...");
 		BufferedImage image = null;
 		try {
@@ -48,8 +48,8 @@ public class InputImageImp implements InputImage {
 		
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		try {
-			
-			ImageIO.write(image, "jpg", bos);
+			String[] routeSplitted = route.split(".");
+			ImageIO.write(image, format, bos);
 			bos.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
