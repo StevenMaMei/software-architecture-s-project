@@ -1,30 +1,30 @@
 D:\Escritorio\semestre_7\arquisoft\proyecto\codigo\TaskDistributor
 frascati compile src TaskDistributor
-frascati run taskDistributorCom -libpath TaskDistributor.jar
+frascati run taskDistributorCom -libpath java -Xms6g -Xmx16g -jar TaskDistributor.jar
 
 D:\Escritorio\semestre_7\arquisoft\proyecto\codigo\InputImage
 frascati compile src InputImage
-frascati run inputCom -libpath InputImage.jar
+frascati run inputCom -libpath java -Xms6g -Xmx16g -jar InputImage.jar
 
 D:\Escritorio\semestre_7\arquisoft\proyecto\codigo\OutputImage
 frascati compile src OutputImage
-frascati run outputImageCom -libpath OutputImage.jar
+frascati run outputImageCom -libpath java -Xms6g -Xmx16g -jar OutputImage.jar
 
 D:\Escritorio\semestre_7\arquisoft\proyecto\codigo\Image
 frascati compile src Image
-frascati run imageCom -libpath Image.jar
+frascati run imageCom -libpath java -Xms6g -Xmx16g -jar Image.jar
 
 D:\Escritorio\semestre_7\arquisoft\proyecto\codigo\Rotation
 frascati compile src Rotation
-frascati run rotationCom -libpath Rotation.jar
+frascati run rotationCom -libpath java -Xms6g -Xmx16g -jar Rotation.jar
 
 D:\Escritorio\semestre_7\arquisoft\proyecto\codigo\RotationConnector
-frascati compile src RotationConnector
+frascati compile src RotationConnectorfrascati
 frascati run rotationConnectorCom -libpath RotationConnector.jar -s r -m run
 
 D:\Escritorio\semestre_7\arquisoft\proyecto\codigo\Controller
 frascati compile src Controller
-frascati run controllerCom -libpath Controller.jar -s r -m run
+frascati run controllerCom -libpath java -Xms6g -Xmx16g -jar Controller.jar -s r -m run
 
-D:\Escritorio\semestre_7\arquisoft\proyecto\foto\3.jpg
+D:\Escritorio\semestre_7\arquisoft\proyecto\foto\2.jpg
 D:\Escritorio\semestre_7\arquisoft\proyecto\fotoProcesada

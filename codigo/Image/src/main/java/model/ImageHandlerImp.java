@@ -4,6 +4,10 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.TreeMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -66,13 +70,25 @@ public class ImageHandlerImp implements ImageHandler {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		originalImages.put(idSequence, image);
-		processedImages.put(idSequence, new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB));
-		quantOfPartsRecieve.put(idSequence, 0);
-		quantOfPartsOfAnImage.put(idSequence, distributor.distribute(idSequence, image.getHeight(), image.getWidth(), Math.toRadians(degrees)));
-		System.out.println("mirando si se guarda "+quantOfPartsRecieve.get(idSequence));
-		
-		idSequence++;
+		try {
+			Subject dis = (Subject) Naming.lookup(distributor.getBinding());
+			originalImages.put(idSequence, image);
+			processedImages.put(idSequence, new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB));
+			quantOfPartsRecieve.put(idSequence, 0);
+			quantOfPartsOfAnImage.put(idSequence, dis.distribute(idSequence, image.getHeight(), image.getWidth(), Math.toRadians(degrees)));
+			System.out.println("mirando si se guarda "+quantOfPartsRecieve.get(idSequence));
+			
+			idSequence++;
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NotBoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void saveImage(long id, String route) {

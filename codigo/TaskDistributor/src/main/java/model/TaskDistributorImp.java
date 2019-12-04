@@ -7,6 +7,7 @@ import java.rmi.RemoteException;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.swing.tree.FixedHeightLayoutCache;
 
@@ -23,7 +24,7 @@ public class TaskDistributorImp implements Subject {
 
 	private static final long serialVersionUID = 1L;
 
-	private static ConcurrentLinkedQueue<ICoordinatesDTO> taskQueue = new ConcurrentLinkedQueue<ICoordinatesDTO>();
+	private static LinkedBlockingQueue<ICoordinatesDTO> taskQueue = new LinkedBlockingQueue<ICoordinatesDTO>();
 	private static TreeMap<String, Observer> observersSet = new TreeMap<String, Observer>();
 
 	@Property(name = "subject")
@@ -96,7 +97,7 @@ public class TaskDistributorImp implements Subject {
 		observersSet.remove(obs.getBinding());
 	}
 
-	public int distribute(long idImage, int height, int width, double radians) {
+	public synchronized int distribute(long idImage, int height, int width, double radians) {
 		System.out.println("orden de distribuir...");
 		System.out.println("current tasks: " + taskQueue.size());
 		System.out.println("-----------------------------------------------------");
@@ -134,7 +135,8 @@ public class TaskDistributorImp implements Subject {
 					if (currDTO != null) {
 						taskQueue.add(currDTO);
 					}
-
+					currDTO = null;
+					System.out.println(rows);
 					currDTO = new CoordinatesDTO(counter, new int[rows][2], radians);
 					quantOfDTOs++;
 					currDTO.setIdImage(idImage);
@@ -156,16 +158,16 @@ public class TaskDistributorImp implements Subject {
 //		noti();
 		System.out.println(taskQueue.size());
 		return quantOfDTOs;
+		
 	}
 
-	public ConcurrentLinkedQueue<ICoordinatesDTO> getTaskQueue() {
+
+	public static LinkedBlockingQueue<ICoordinatesDTO> getTaskQueue() {
 		return taskQueue;
 	}
-
-	public void setTaskQueue(ConcurrentLinkedQueue<ICoordinatesDTO> taskQueue) {
-		this.taskQueue = taskQueue;
+	public static void setTaskQueue(LinkedBlockingQueue<ICoordinatesDTO> taskQueue) {
+		TaskDistributorImp.taskQueue = taskQueue;
 	}
-
 	public ICoordinatesDTO getState() {
 		System.out.println("returning state");
 		return taskQueue.poll();
