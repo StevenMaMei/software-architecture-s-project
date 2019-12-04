@@ -20,17 +20,23 @@ public class Rotation implements Observer{
 	private static int idSequence = 0;
 	private ICoordinatesDTO coordinatesAndInfo;
 	private int id = idSequence++;
-	@Reference(name="subject")
+
 	private Subject subject;
 	@Reference(name="imageHandler")
 	transient private ImageHandler image;
 	
 	static ExecutorService service;
 	int threads;
+	
 	@Property(name="observer")
 	String rmiBinding;
 	
-
+	@Property(name="subject")
+	String rmiSubject;
+	
+	public Rotation() {
+		subject = (Subject) Naming.lookup(rmiSubject);
+	}
 	public Subject getSubject() {
 		return subject;
 	}

@@ -8,6 +8,7 @@
 		<implementation.java class="model.Rotation" />
 	    
 	    <property name="observer">rmi://localhost:1105/rmiServiceObserver</property>
+	    <property name="subject">rmi://localhost:1105/rmiServiceObserver</property>
 	    
 	    <service name="observer">
 	      <interface.java interface="interfaces.Observer"/>
