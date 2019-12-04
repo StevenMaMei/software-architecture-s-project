@@ -1,6 +1,9 @@
 package model;
 
+import java.net.MalformedURLException;
 import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -35,7 +38,18 @@ public class Rotation implements Observer{
 	String rmiSubject;
 	
 	public Rotation() {
-		subject = (Subject) Naming.lookup(rmiSubject);
+		try {
+			subject = (Subject) Naming.lookup(rmiSubject);
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NotBoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	public Subject getSubject() {
 		return subject;
