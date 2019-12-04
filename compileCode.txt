@@ -26,5 +26,9 @@ D:\Escritorio\semestre_7\arquisoft\proyecto\codigo\Controller
 frascati compile src Controller
 frascati run controllerCom -libpath java -Xms6g -Xmx16g -jar Controller.jar -s r -m run
 
+<<<<<<< HEAD
 D:\Escritorio\semestre_7\arquisoft\proyecto\foto\4.tif
+=======
+D:\Escritorio\semestre_7\arquisoft\proyecto\foto\2.jpg
+>>>>>>> 1a1323a88cb61081449282f43d51fb2c1b86b7a9
 D:\Escritorio\semestre_7\arquisoft\proyecto\fotoProcesada
