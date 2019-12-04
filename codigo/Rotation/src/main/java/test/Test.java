@@ -1,11 +1,15 @@
 package test;
 
+import java.net.MalformedURLException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+
 import model.CoordinatesDTO;
 import model.Rotation;
 
 public class Test {
 
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) throws InterruptedException, MalformedURLException, RemoteException, NotBoundException {
 		int[][] coords = new int[][] {{2,2},{3,1},{5,8},{4,4}};
 		double rad = Math.toRadians(39);
 		
