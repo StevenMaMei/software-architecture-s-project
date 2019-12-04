@@ -35,7 +35,7 @@ public class FragmentProcessor implements Runnable {
 			int y = coords[i][1] + mHeight;
 			int xOrig = (int) Math.floor((index + i)%width);
 			int yOrig = (int) Math.floor((index + i)/height);
-			if(xOrig > -1 && yOrig > -1 && xOrig < width && yOrig < height ) {
+			if(xOrig > -1 && yOrig > -1 && xOrig < width && yOrig < height && x > -1 && y > -1 && x < width && y < height) {
 
 				
 				processingImage.setRGB(x, y, originalImage.getRGB(xOrig, yOrig));

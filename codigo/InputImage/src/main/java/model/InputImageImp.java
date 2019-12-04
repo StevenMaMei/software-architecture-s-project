@@ -48,7 +48,7 @@ public class InputImageImp implements InputImage {
 		
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		try {
-
+			
 			ImageIO.write(image, "jpg", bos);
 			bos.flush();
 		} catch (IOException e) {

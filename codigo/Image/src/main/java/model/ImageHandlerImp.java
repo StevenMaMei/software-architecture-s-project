@@ -92,7 +92,7 @@ public class ImageHandlerImp implements ImageHandler {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		outputImage.saveImage(data, route+"/"+id+".jpg");
+		outputImage.saveImage(data, route+"/"+id+".tif");
 		originalImages.remove(id);
 		processedImages.remove(id);
 		quantOfPartsOfAnImage.remove(id);
