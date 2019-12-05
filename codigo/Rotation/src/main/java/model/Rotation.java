@@ -23,6 +23,7 @@ public class Rotation implements Observer{
 	private static int idSequence = 0;
 	private ICoordinatesDTO coordinatesAndInfo;
 	private int id = idSequence++;
+
 	@Reference(name="subject")
 	private Subject subject;
 	@Reference(name="imageHandler")
@@ -36,9 +37,6 @@ public class Rotation implements Observer{
 	@Property(name="subject")
 	String rmiSubject;
 	
-	public Rotation() throws MalformedURLException, RemoteException, NotBoundException {
-		subject = (Subject) Naming.lookup(rmiSubject);
-	}
 
 	public Subject getSubject() {
 		return subject;
@@ -67,7 +65,18 @@ public class Rotation implements Observer{
 	
 	public void attach() {
 		System.out.println("attaching observer");
-
+		try {
+			subject = (Subject) Naming.lookup(rmiSubject);
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NotBoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		subject.attach(this);
 
 	}

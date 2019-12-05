@@ -8,7 +8,7 @@
 		<implementation.java class="model.Rotation" />
 	    
 	    <property name="observer">rmi://localhost:1105/rmiServiceObserver</property>
-	    <property name="subject">rmi://localhost:1105/rmiServiceSubject</property>
+	    <property name="subject">rmi://localhost:1104/rmiServiceSubject</property>
 	    <service name="observer">
 	      <interface.java interface="interfaces.Observer"/>
 	      <frascati:binding.rmi host="localhost" serviceName="rmiServiceObserver" port="1105"> </frascati:binding.rmi>

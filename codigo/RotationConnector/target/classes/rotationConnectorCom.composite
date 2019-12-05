@@ -16,12 +16,7 @@
 				serviceName="rmiServiceObserver" port="1105">
 			</frascati:binding.rmi>
 		</reference>
-	    <reference name="subject">
-			<interface.java interface="interfaces.Subject" />
-			<frascati:binding.rmi host="localhost"
-				serviceName="rmiServiceSubject" port="1104">
-			</frascati:binding.rmi>
-		</reference>
+
 		
 	</component>
 	
